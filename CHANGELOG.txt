@@ -1,0 +1,79 @@
+Cartoon Studio Pro 1.9.2  (per-animation root transforms)
+  NEW: each sequence clip has Location offset (X/Y/Z) and Rotation offset (X/Y/Z) controls.
+       Offsets are applied as that clip begins and carry through the remaining sequence.
+       Position and rotation changes ease across the blend interval.
+
+Cartoon Studio Pro 1.9.1  (Animation Library from armatures + choose which frames to copy)
+  NEW: Animation Library > "From an armature in the scene": drag an armature that has an animation from the
+       Outliner onto the Armature field and press Add (or select armatures and press Add Selected).
+       Its animation is put in the library and can be added to a character's sequence like any other.
+  NEW: every animation in the sequence has "Copy from frame" / "to frame": only those frames are copied
+       and pasted on the character (0 and 0 = the whole animation). Works with "Copy keyframes onto the character".
+
+Cartoon Studio Pro 1.9.0  (keyframes copied onto the character - your manual workflow, automatic)
+  NEW: "Copy keyframes onto the character" (ON by default). The add-on now does by itself what you do by hand:
+       it copies the keyframes of animation 1, then animation 2 ... onto the rig as ONE normal action
+       (CS_Keys_<rig>), so everything shows up in the Graph Editor / Dope Sheet, grouped per bone.
+       * looping (Frames longer than the animation), Animation speed and the blend between two animations are
+         written as ordinary keys - no hidden NLA strips.
+       * quaternions are flipped to the same side at every join, so the join never spins the long way round.
+       * a bone that one animation does not move rests while that animation plays (no stuck pose).
+       * position / turning still go on the black plus-sign root, so each animation still starts where the last stopped.
+       * press "Keep my edits (Graph Editor)" BEFORE you adjust curves - it stops the automatic rebuild so your
+         changes are not overwritten. "Back to Sequence" throws your edits away and rebuilds from the list.
+       Switch the option OFF to get the old NLA-strip behaviour.
+
+Cartoon Studio Pro 1.8.6  (plain copy)
+  CHANGED: animations are now simply COPIED onto the character, one after another, exactly as they are.
+           Nothing inside the animation is changed. (Use Mixamo "In Place" walk / run; the add-on moves
+           the character forward itself and the next animation starts where the last one stopped.)
+  The re-fitting added in 1.8.5 is still there but OFF. Switch on "Fit animations to the skeleton (advanced)"
+  only if a copied animation looks wrong because the skeleton is different.
+
+Cartoon Studio Pro 1.8.5  (character tips over / bends after adding an animation)
+  FIXED: if the character's skeleton has different bone axes, rest pose or turning than the skeleton the
+         animation was made on, the same rotation numbers folded the body the wrong way (character tipped
+         over, shrank, leaned). The animation is now re-fitted automatically (on a copy; your library
+         animation is untouched). Checked automatically; nothing changes when the skeletons already match.
+  FIXED: hips up/down/forward motion is scaled to the character's size (bone units differ between files).
+         (Needs the skeleton size to be remembered: import ONE Mixamo animation again, or ignore if it looks fine.)
+  FIXED: an animation that moves or rotates the whole armature object (instead of the hips) is switched off in
+         the copy; it pulled the character back to the world origin.
+  FIXED: walking direction follows the way the character really faces (before it assumed -Y).
+  NEW:   "Detected:" line under the selected animation and a "Skeleton:" line in the sequence panel say what
+         was found. The same text is written to the log (studio.log / console).
+
+Cartoon Studio Pro 1.8.4  (one-click pose edit)
+  NEW: "Edit Pose" button: keeps the animation, switches to Pose Mode, turns Auto-Key on. "Finish Pose Edit" leaves it.
+
+Cartoon Studio Pro 1.8.3  (animation speed per animation)
+  NEW: "Animation speed" for every animation in the sequence (0.05 - 10). 2 = twice as fast, 0.5 = slow motion.
+       Frames changes with it so the animation still plays the same number of times; you can still edit
+       Frames afterwards. In-place walk / run travel faster or slower with it, so feet do not slide.
+
+Cartoon Studio Pro 1.8.2  (editable pose)
+  NEW: "Bake to Edit Pose" button - pose edits no longer snap back; "Back to Sequence" rebuilds.
+
+Cartoon Studio Pro 1.8.1  (continuous movement between animations)
+  FIXED: an animation that travels by itself (Mixamo clip downloaded WITHOUT 'In Place', jump forward, slide,
+         roll ...) now always moves the character, even when "Move forward" is not ticked. Before, its
+         travel was removed from the hips but never given to the root, so the next animation started back at
+         the old place.
+  FIXED: small self-travel (from 0.08 m instead of 0.25 m) is moved from the hips to the root too, so the
+         hips no longer drift and snap back at the start of the next animation.
+  NEW:   the log (console / studio.log) lists, for every animation, whether it moves by itself, is moved by
+         speed, or stays, plus the root path (frame, x, y) - useful if something still looks wrong.
+
+Cartoon Studio Pro 1.8.0  (slim version: characters + animation sequence)
+  REMOVED: shots, story / AI breakdown, cameras, lights, world builder, VFX, render queue, export,
+           quality checks, one-click production, vehicle add-on.
+  KEPT:    Character Library (any model, auto skeleton, marker rigging, restore, save)
+           Animation Library (Mixamo .fbx / .glb actions)
+  NEW:     Animation Sequence - pick a character, add animations one after the other (run, then walk ...).
+           * Each animation starts exactly where the previous one stopped (same place, same direction).
+           * Walk / run move the character forward. In-place clips use a walk or run speed;
+             clips that move by themselves (root motion) use their own distance.
+           * Optional Turn (degrees) per animation to change direction. Optional Speed.
+           * Blend frames melt one animation into the next. Frames = how long it plays (longer = repeats).
+           * Everything updates automatically when you change something.
+           * Your own placement is respected: move / rotate / scale the black plus-sign root and press Update.
